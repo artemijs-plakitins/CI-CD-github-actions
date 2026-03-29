@@ -34,25 +34,20 @@ runs:
         echo Stopping old app
         pm2 delete greetings-app-${{ inputs.env }} & set "errorlevel=0"
 
-    - name: Start app (FLASK)
-      shell: powershell
+    - name: Start app (pm2)
+      shell: cmd
       working-directory: greetings
       run: |
-        Write-Host "Starting app on port ${{ inputs.port }}..."
-        Start-Process -NoNewWindow `
-          -FilePath "venv\Scripts\python.exe" `
-          -ArgumentList "app.py --port ${{ inputs.port }}"
-
-    - name: Wait for app
-      shell: powershell
-      run: Start-Sleep -Seconds 5
+        echo Starting app on port ${{ inputs.port }}
+        pm2 start app.py --name greetings-app-${{ inputs.env }} --interpreter venv\Scripts\python.exe -- --port ${{ inputs.port }}
 
     - name: Check if app is alive
       shell: powershell
       run: |
-        Start-Sleep -Seconds 3
+        Start-Sleep -Seconds 5
         try {
-          Invoke-WebRequest http://localhost:${{ inputs.port }}
+          $response = Invoke-WebRequest "http://localhost:${{ inputs.port }}/greetings"
+          Write-Host $response.Content
           Write-Host "App is running"
         } catch {
           Write-Host "App NOT running"
