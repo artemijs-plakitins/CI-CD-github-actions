@@ -1,0 +1,33 @@
+name: Running API tests (course-js-api-framework
+description: Running greetings API tests
+
+inputs:
+  env:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Checkout main repo
+      uses: actions/checkout@v4
+
+    - name: Clone test repository
+      uses: actions/checkout@v4
+      with:
+        repository: mtararujs/course-js-api-framework
+        path: tests
+
+    - name: Install npm dependencies
+      shell: cmd
+      working-directory: tests
+      run: |
+        echo Installing npm dependencies...
+        npm install
+
+    - name: Run tests
+      shell: cmd
+      working-directory: tests
+      run: |
+        echo Running tests for ${{ inputs.env }}...
+        npm run greetings greetings_${{ inputs.env }}
