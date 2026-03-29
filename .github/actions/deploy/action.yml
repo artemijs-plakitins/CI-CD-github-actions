@@ -38,12 +38,10 @@ runs:
       shell: powershell
       working-directory: greetings
       run: |
-        Write-Host "Starting Flask app on port ${{ inputs.port }}..."
-        $env:PORT = "${{ inputs.port }}"
-        $env:FLASK_DEBUG = "0"
+        Write-Host "Starting app on port ${{ inputs.port }}..."
         Start-Process -NoNewWindow `
           -FilePath "venv\Scripts\python.exe" `
-          -ArgumentList "app.py"
+          -ArgumentList "app.py --port ${{ inputs.port }}"
 
     - name: Wait for app
       shell: powershell
