@@ -1,0 +1,19 @@
+name: Install Python Dependencies
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Clone repository (python-greetings)
+      uses: actions/checkout@v4
+      with:
+        repository: mtararujs/python-greetings
+        path: greetings
+
+    - name: Setup venv and install deps
+      shell: cmd
+      working-directory: greetings
+      run: |
+        python -m venv venv
+        venv\Scripts\python -m pip install -r requirements.txt
