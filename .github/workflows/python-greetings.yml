@@ -10,6 +10,8 @@ jobs:
     name: install-pip-deps
     runs-on: self-hosted
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
       - name: Installing all required dependencies
         run: echo Installing all required dependencies
       - name: Run install composite action
