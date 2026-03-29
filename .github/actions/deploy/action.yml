@@ -41,12 +41,18 @@ runs:
         echo Starting app on port ${{ inputs.port }}
         pm2 start app.py --name greetings-app-${{ inputs.env }} --interpreter venv\Scripts\python.exe -- --port ${{ inputs.port }}
 
+    - name: Show PM2 process list
+      shell: cmd
+      run: |
+        pm2 list
+        pm2 logs greetings-app-${{ inputs.env }} --lines 50 --nostream
+
     - name: Check if app is alive
       shell: powershell
       run: |
         Start-Sleep -Seconds 5
         try {
-          $response = Invoke-WebRequest "http://localhost:${{ inputs.port }}/greetings"
+          $response = Invoke-WebRequest "http://127.0.0.1:${{ inputs.port }}/greetings"
           Write-Host $response.Content
           Write-Host "App is running"
         } catch {
