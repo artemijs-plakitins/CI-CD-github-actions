@@ -43,7 +43,10 @@ runs:
         $env:PORT = "${{ inputs.port }}"
         Start-Process -NoNewWindow `
           -FilePath "venv\Scripts\python.exe" `
-          -ArgumentList "app.py"
+          -ArgumentList "app.py" `
+          -Environment @{
+            PORT = "${{ inputs.port }}"
+          }
 
     - name: Wait for app
       shell: powershell
