@@ -42,4 +42,16 @@ runs:
         set FLASK_APP=app.py
         set FLASK_ENV=development
         set PORT=${{ inputs.port }}
-        start "" cmd /c "venv\Scripts\flask run --host=0.0.0.0 --port=${{ inputs.port }}"   
+        start "" cmd /c "venv\Scripts\flask run --host=0.0.0.0 --port=${{ inputs.port }}"
+
+    - name: Check if app is alive
+      shell: powershell
+      run: |
+        Start-Sleep -Seconds 3
+        try {
+          Invoke-WebRequest http://localhost:${{ inputs.port }}
+          Write-Host "App is running"
+        } catch {
+          Write-Host "App NOT running"
+          exit 1
+        }
