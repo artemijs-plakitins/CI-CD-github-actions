@@ -35,14 +35,19 @@ runs:
         pm2 delete greetings-app-${{ inputs.env }} & set "errorlevel=0"
 
     - name: Start app (FLASK)
-      shell: cmd
+      shell: powershell
       working-directory: greetings
       run: |
-        echo Starting Flask app on port ${{ inputs.port }}...
-        set FLASK_APP=app.py
-        set FLASK_ENV=development
-        set PORT=${{ inputs.port }}
-        start "" cmd /c "venv\Scripts\flask run --host=0.0.0.0 --port=${{ inputs.port }}"
+        Write-Host "Starting Flask app on port ${{ inputs.port }}..."
+        $env:FLASK_APP = "app.py"
+        $env:PORT = "${{ inputs.port }}"
+        Start-Process -NoNewWindow `
+          -FilePath "venv\Scripts\python.exe" `
+          -ArgumentList "app.py"
+
+    - name: Wait for app
+      shell: powershell
+      run: Start-Sleep -Seconds 5
 
     - name: Check if app is alive
       shell: powershell
