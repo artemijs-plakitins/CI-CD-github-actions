@@ -45,10 +45,10 @@ runs:
         pm2 list
 
     - name: Wait for app startup
-      shell: cmd
+      shell: powershell
       run: |
-        echo Waiting for app to start...
-        timeout /t 5 /nobreak
+        Write-Host "Waiting for app to start"
+        Start-Sleep -Seconds 5
 
     - name: Check app health
       shell: powershell
