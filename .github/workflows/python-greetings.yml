@@ -5,42 +5,112 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-concurrency:
-  group: python-greetings-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-
   install-pip-deps:
+    name: install-pip-deps
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Installing dependencies
-        run: echo Installing dependencies...
-      - name: Run install coposite action
+      - name: Installing all required dependencies
+        run: echo Installing all required dependencies
+      - name: Run install composite action
         uses: ./.github/actions/install_dependencies
-        
+
   deploy-to-dev:
+    name: deploy-to-dev
     runs-on: self-hosted
     needs: install-pip-deps
     steps:
-      - uses: actions/checkout@v6
-      - name: Deploying to DEV environment
-        run: echo Deploying to DEV environment
-      - uses: ./.github/actions/deploy
+      - name: Deploying application to DEV
+        run: echo Deploying application to DEV
+      - name: Run deploy composite action
+        uses: ./.github/actions/deploy
         with:
           env: dev
-          port: 7001
+          port: "7001"
 
-  tests-on-dev:
-    name: tests-on-dev
+  # tests-on-dev:
+  #   name: tests-on-dev
+  #   runs-on: self-hosted
+  #   needs: deploy-to-dev
+  #   steps:
+  #     - name: Running tests on DEV...
+  #       run: echo Running tests on DEV...
+  #     - name: Run test composite action
+  #       uses: ./.github/actions/test
+  #       with:
+  #         env: dev
+
+  deploy-to-stg:
+    name: deploy-to-stg
     runs-on: self-hosted
-    needs: deploy-to-dev
+    needs: install-pip-deps # tests-on-dev !!!
     steps:
-      - name: Running tests on DEV
-        run: echo Running tests on DEV
-      - name: Run test composite action
-        uses: ./.github/actions/test
+      - name: Deploying application to STG
+        run: echo Deploying application to STG
+      - name: Run deploy composite action
+        uses: ./.github/actions/deploy
         with:
-          env: dev
+          env: stg
+          port: "7002"
+
+  # tests-on-stg:
+  #   name: tests-on-stg
+  #   runs-on: self-hosted
+  #   needs: deploy-to-stg
+  #   steps:
+  #     - name: Running tests on STG...
+  #       run: echo Running tests on STG...
+  #     - name: Run test composite action
+  #       uses: ./.github/actions/test
+  #       with:
+  #         env: stg
+
+  deploy-to-preprod:
+    name: deploy-to-preprod
+    runs-on: self-hosted
+    needs: deploy-to-stg # tests-on-stg
+    steps:
+      - name: Deploying application to PREPROD
+        run: echo Deploying application to PREPROD
+      - name: Run deploy composite action
+        uses: ./.github/actions/deploy
+        with:
+          env: preprod
+          port: "7003"
+
+  # tests-on-preprod:
+  #   name: tests-on-preprod
+  #   runs-on: self-hosted
+  #   needs: deploy-to-preprod
+  #   steps:
+  #     - name: Running tests on PREPROD...
+  #       run: echo Running tests on PREPROD...
+  #     - name: Run test composite action
+  #       uses: ./.github/actions/test
+  #       with:
+  #         env: preprod
+
+  deploy-to-prod:
+    name: deploy-to-prod
+    runs-on: self-hosted
+    needs: deploy-to-preprod # tests-on-preprod
+    steps:
+      - name: Deploying application to PROD...
+        run: echo Deploying application to PROD...
+      - name: Run deploy composite action
+        uses: ./.github/actions/deploy
+        with:
+          env: prod
+          port: "7004"
+
+  # tests-on-prod:
+  #   name: tests-on-prod
+  #   runs-on: self-hosted
+  #   needs: deploy-to-prod
+  #   steps:
+  #     - name: Running tests on PROD...
+  #       run: echo Running tests on PROD...
+  #     - name: Run test composite action
+  #       uses: ./.github/actions/test
+  #       with:
+  #         env: prod
