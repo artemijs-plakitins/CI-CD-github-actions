@@ -34,9 +34,9 @@ runs:
         echo Stopping old app
         pm2 delete greetings-app-${{ inputs.env }} & set "errorlevel=0"
 
-    - name: Start app
+    - name: Start app (without pm2)
       shell: cmd
       working-directory: greetings
       run: |
         echo Starting app on port ${{ inputs.port }}...
-        set PORT=${{ inputs.port }} && pm2 start venv\Scripts\python.exe --name greetings-app-${{ inputs.env }} -- app.py
+        set PORT=${{ inputs.port }} && start /B venv\Scripts\python.exe app.py
