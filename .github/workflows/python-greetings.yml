@@ -8,7 +8,12 @@ on:
     branches: [ "main" ]
 
   workflow_dispatch:
-
+    inputs:
+      name:
+        type: string
+        default: 'Hello!'
+        description: 'Name Input'
+        required: true
 
 jobs:
   
