@@ -1,5 +1,4 @@
 name: Deploy App
-
 description: Deploy python-greetings app using pm2
 
 inputs:
@@ -20,6 +19,15 @@ runs:
       with:
         repository: mtararujs/python-greetings
         path: greetings
+
+    - name: Setup virtual environment
+      shell: cmd
+      working-directory: greetings
+      run: |
+        echo Creating virtual environment
+        python -m venv venv
+        echo Installing dependencies
+        venv\Scripts\python.exe -m pip install -r requirements.txt
 
     - name: Stop existing app
       shell: cmd
