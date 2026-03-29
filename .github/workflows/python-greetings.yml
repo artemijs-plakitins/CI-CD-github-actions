@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  Install-pip-dependencies:
+  install-pip-deps:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
@@ -17,9 +17,9 @@ jobs:
       - name: Run install coposite action
         uses: ./.github/actions/install_dependencies
         
-  Deploying-to-Dev-Environment:
+  deploy-to-dev:
     runs-on: self-hosted
-    needs: Install-pip-dependencies
+    needs: install-pip-deps
     steps:
       - uses: actions/checkout@v6
       - name: Deploying to DEV environment
@@ -28,3 +28,15 @@ jobs:
         with:
           env: dev
           port: 7001
+
+  tests-on-dev:
+    name: tests-on-dev
+    runs-on: self-hosted
+    needs: deploy-to-dev
+    steps:
+      - name: Running tests on DEV
+        run: echo Running tests on DEV
+      - name: Run test composite action
+        uses: ./.github/actions/test
+        with:
+          env: dev
