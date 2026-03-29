@@ -11,7 +11,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Installing dependencies
         run: echo Installing dependencies...
       - name: Run install coposite action
@@ -21,7 +21,7 @@ jobs:
     runs-on: self-hosted
     needs: Install-pip-dependencies
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Deploying to DEV environment
         run: echo Deploying to DEV environment
       - uses: ./.github/actions/deploy
