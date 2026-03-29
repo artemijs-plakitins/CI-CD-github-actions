@@ -68,7 +68,7 @@ jobs:
   deploy-to-preprod:
     name: deploy-to-preprod
     runs-on: self-hosted
-    needs: deploy-to-stg # tests-on-stg
+    needs: deploy-to-stg # tests-on-stg !!!
     steps:
       - name: Deploying application to PREPROD
         run: echo Deploying application to PREPROD
@@ -93,7 +93,7 @@ jobs:
   deploy-to-prod:
     name: deploy-to-prod
     runs-on: self-hosted
-    needs: deploy-to-preprod # tests-on-preprod
+    needs: deploy-to-preprod # tests-on-preprod !!!
     steps:
       - name: Deploying application to PROD
         run: echo Deploying application to PROD
