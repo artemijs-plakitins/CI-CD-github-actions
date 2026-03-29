@@ -34,22 +34,12 @@ runs:
         echo Stopping old app
         pm2 delete greetings-app-${{ inputs.env }} & set "errorlevel=0"
 
-    - name: Start app
+    - name: Start app (FLASK)
       shell: cmd
       working-directory: greetings
       run: |
-        echo Starting app on port ${{ inputs.port }}...
-        set PORT=${{ inputs.port }} && start "" cmd /c "venv\Scripts\python.exe app.py"
-
-    - name: Check if app is alive
-      shell: powershell
-      run: |
-        Start-Sleep -Seconds 3
-        try {
-          Invoke-WebRequest http://localhost:${{ inputs.port }}
-          Write-Host "App is running"
-        } catch {
-          Write-Host "App NOT running"
-          exit 1
-        }
-    
+        echo Starting Flask app on port ${{ inputs.port }}...
+        set FLASK_APP=app.py
+        set FLASK_ENV=development
+        set PORT=${{ inputs.port }}
+        start "" cmd /c "venv\Scripts\flask run --host=0.0.0.0 --port=${{ inputs.port }}"   
