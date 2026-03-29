@@ -29,7 +29,7 @@ runs:
       shell: cmd
       run: |
         echo Waiting for app to start
-        timeout /t 5
+        ing 127.0.0.1 -n 6 > nul
 
     - name: Run tests
       shell: cmd
