@@ -33,8 +33,8 @@ jobs:
   #   runs-on: self-hosted
   #   needs: deploy-to-dev
   #   steps:
-  #     - name: Running tests on DEV...
-  #       run: echo Running tests on DEV...
+  #     - name: Running tests on DEV
+  #       run: echo Running tests on DEV
   #     - name: Run test composite action
   #       uses: ./.github/actions/test
   #       with:
@@ -43,7 +43,7 @@ jobs:
   deploy-to-stg:
     name: deploy-to-stg
     runs-on: self-hosted
-    needs: install-pip-deps # tests-on-dev !!!
+    needs: deploy-to-dev # tests-on-dev !!!
     steps:
       - name: Deploying application to STG
         run: echo Deploying application to STG
@@ -58,8 +58,8 @@ jobs:
   #   runs-on: self-hosted
   #   needs: deploy-to-stg
   #   steps:
-  #     - name: Running tests on STG...
-  #       run: echo Running tests on STG...
+  #     - name: Running tests on STG
+  #       run: echo Running tests on STG
   #     - name: Run test composite action
   #       uses: ./.github/actions/test
   #       with:
@@ -83,8 +83,8 @@ jobs:
   #   runs-on: self-hosted
   #   needs: deploy-to-preprod
   #   steps:
-  #     - name: Running tests on PREPROD...
-  #       run: echo Running tests on PREPROD...
+  #     - name: Running tests on PREPROD
+  #       run: echo Running tests on PREPROD
   #     - name: Run test composite action
   #       uses: ./.github/actions/test
   #       with:
@@ -95,8 +95,8 @@ jobs:
     runs-on: self-hosted
     needs: deploy-to-preprod # tests-on-preprod
     steps:
-      - name: Deploying application to PROD...
-        run: echo Deploying application to PROD...
+      - name: Deploying application to PROD
+        run: echo Deploying application to PROD
       - name: Run deploy composite action
         uses: ./.github/actions/deploy
         with:
@@ -108,8 +108,8 @@ jobs:
   #   runs-on: self-hosted
   #   needs: deploy-to-prod
   #   steps:
-  #     - name: Running tests on PROD...
-  #       run: echo Running tests on PROD...
+  #     - name: Running tests on PROD
+  #       run: echo Running tests on PROD
   #     - name: Run test composite action
   #       uses: ./.github/actions/test
   #       with:
