@@ -1,39 +1,33 @@
-name: Running API tests (course-js-api-framework
-description: Running greetings API tests
+name: Run API Tests
+description: TESTS
 
 inputs:
   env:
+    description: Target environment name
     required: true
 
 runs:
   using: "composite"
   steps:
+    - name: Checkout pipeline repository
+      uses: actions/checkout@v6
 
-    - name: Checkout main repo
-      uses: actions/checkout@v4
-
-    - name: Clone test repository
-      uses: actions/checkout@v4
+    - name: Clone course-js-api-framework repository
+      uses: actions/checkout@v6
       with:
         repository: mtararujs/course-js-api-framework
-        path: tests
+        path: api-tests
 
     - name: Install npm dependencies
       shell: cmd
-      working-directory: tests
+      working-directory: api-tests
       run: |
         echo Installing npm dependencies...
         npm install
 
-    - name: Waiting for app to start, to avoid (Connection refused)
+    - name: Run greetings tests
       shell: cmd
+      working-directory: api-tests
       run: |
-        echo Waiting for app to start
-        ping 127.0.0.1 -n 6 > nul
-
-    - name: Run tests
-      shell: cmd
-      working-directory: tests
-      run: |
-        echo Running tests for ${{ inputs.env }}...
+        echo Running greetings tests for environment ${{ inputs.env }}...
         npm run greetings greetings_${{ inputs.env }}
