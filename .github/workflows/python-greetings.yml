@@ -27,6 +27,13 @@ jobs:
         with:
           env: dev
           port: "7001"
+      - name: Running tests on DEV...
+        run: echo Running tests on DEV...
+      - name: Run test composite action
+        uses: ./.github/actions/test
+        with:
+          env: dev
+        
 
   # tests-on-dev:
   #   name: tests-on-dev
