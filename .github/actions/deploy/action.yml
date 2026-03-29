@@ -1,5 +1,5 @@
 name: Deploy App
-description: Deploy python-greetings app using pm2
+description: Deploying app with pm2
 
 inputs:
   env:
@@ -11,8 +11,7 @@ runs:
   using: "composite"
   steps:
 
-    - name: Checkout main repo
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Clone python-greetings repo
       uses: actions/checkout@v4
@@ -24,20 +23,17 @@ runs:
       shell: cmd
       working-directory: greetings
       run: |
-        echo Creating virtual environment
         python -m venv venv
-        echo Installing dependencies
         venv\Scripts\python.exe -m pip install -r requirements.txt
 
     - name: Stop existing app
       shell: cmd
       run: |
-        echo Stopping old app
         pm2 delete greetings-app-${{ inputs.env }} & set "errorlevel=0"
 
-    - name: Start app (pm2)
+    - name: Start app
       shell: cmd
       working-directory: greetings
       run: |
         echo Starting app on port ${{ inputs.port }}...
-        pm2 start app.py --name greetings-app-${{ inputs.env }} -- --port ${{ inputs.port }}
+        pm2 start venv\Scripts\python.exe --name greetings-app-${{ inputs.env }} -- app.py --port ${{ inputs.port }}
