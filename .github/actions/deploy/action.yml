@@ -39,9 +39,8 @@ runs:
       working-directory: greetings
       run: |
         Write-Host "Starting Flask app on port ${{ inputs.port }}..."
-        $env:FLASK_APP = "app.py"
-        $env:FLASK_ENV = "production"
         $env:PORT = "${{ inputs.port }}"
+        $env:FLASK_DEBUG = "0"
         Start-Process -NoNewWindow `
           -FilePath "venv\Scripts\python.exe" `
           -ArgumentList "app.py"
