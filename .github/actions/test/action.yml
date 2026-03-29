@@ -25,6 +25,12 @@ runs:
         echo Installing npm dependencies...
         npm install
 
+    - name: Waiting for app to start, to avoid (Connection refused)
+      shell: cmd
+      run: |
+        echo Waiting for app to start
+        timeout /t 5
+
     - name: Run tests
       shell: cmd
       working-directory: tests
