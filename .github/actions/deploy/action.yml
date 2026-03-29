@@ -37,3 +37,28 @@ runs:
       run: |
         echo Starting app on port ${{ inputs.port }}...
         pm2 start venv\Scripts\python.exe --name greetings-app-${{ inputs.env }} -- app.py --port ${{ inputs.port }}
+
+    - name: Show PM2 process list
+      shell: cmd
+      run: |
+        echo Showing PM2 process list...
+        pm2 list
+
+    - name: Wait for app startup
+      shell: cmd
+      run: |
+        echo Waiting for app to start...
+        timeout /t 5 /nobreak
+
+    - name: Check app health
+      shell: powershell
+      run: |
+        Write-Host "Checking http://127.0.0.1:${{ inputs.port }}/greetings"
+        Invoke-WebRequest -Uri "http://127.0.0.1:${{ inputs.port }}/greetings" -UseBasicParsing
+
+    - name: Show PM2 logs if needed
+      if: always()
+      shell: cmd
+      run: |
+        echo Showing PM2 logs...
+        pm2 logs greetings-app-${{ inputs.env }} --lines 30 --nostream
