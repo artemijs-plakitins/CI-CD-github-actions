@@ -16,3 +16,15 @@ jobs:
         run: echo Installing dependencies...
       - name: Run install coposite action
         uses: ./.github/actions/install_dependencies
+        
+  deploy-to-dev:
+    runs-on: [self-hosted, windows]
+    needs: install-pip-deps
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploying to DEV environment
+        run: echo Deploying to DEV environment...
+      - uses: ./.github/actions/deploy
+        with:
+          env: dev
+          port: 7001
